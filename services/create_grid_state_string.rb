@@ -1,16 +1,20 @@
 module TicTacToe
-  class PrintGridState
+  class CreateGridStateString
     def initialize(state)
       @state = state
     end
 
     def call
+      grid_string = ""
+
       (2).downto(0).each do |y|
         (0..2).each do |x|
-          print @state[x][y]
+          grid_string += @state[x][y]
         end
-        puts
+        grid_string += "\n"
       end
+
+      grid_string
     end
   end
 end

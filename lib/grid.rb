@@ -4,25 +4,30 @@ module TicTacToe
     CROSS = 'X'.freeze
     NOUGHT = 'O'.freeze
 
-    DEFAULT = [
-      [EMPTY, EMPTY, EMPTY],
-      [EMPTY, EMPTY, EMPTY],
-      [EMPTY, EMPTY, EMPTY]
-    ]
-
     attr_accessor :state
 
-    def initialize(state = DEFAULT)
-      @state = state
+    def initialize(state = nil)
+      @state = state ||
+        [
+          [EMPTY, EMPTY, EMPTY],
+          [EMPTY, EMPTY, EMPTY],
+          [EMPTY, EMPTY, EMPTY]
+        ]
     end
 
-    def print
-      PrintGridState.new(@state).call
+    def to_s
+      CreateGridStateString.new(@state).call
     end
 
     def make_move(x, y, symbol)
-      CheckMoveValid.new(@state, x, y, symbol).call
-      @state[x][y] = symbol
+      service = CheckMoveValid.new(@state, x, y, symbol)
+      if service.call
+        @state[x][y] = symbol
+        true
+      else
+        puts service.error_message
+        false
+      end
     end
   end
 end

@@ -6,7 +6,7 @@ module TicTacToe
     def self.start
       # Create new grid
       grid = Grid.new
-      grid.print
+      print grid
 
       puts "\nName for Player 1"
       player1 = Player.new(gets.chomp, Grid::CROSS)
@@ -36,21 +36,17 @@ module TicTacToe
         player = turn_count % 2 == 1 ? player1 : player2
 
         while true
-          begin
-            puts "\n#{player.name}'s turn"
-            puts "X Coordinate: (0, 1, 2)"
-            x = gets.chomp.to_i
-            puts "Y Coordinate: (0, 1, 2)"
-            y = gets.chomp.to_i
+          puts "\n#{player.name}'s turn"
+          puts "X Coordinate: (0, 1, 2)"
+          x = gets.chomp.to_i
+          puts "Y Coordinate: (0, 1, 2)"
+          y = gets.chomp.to_i
 
-            grid.make_move(x, y, player.symbol)
-            break
-          rescue InvalidMoveError
-          end
+          break if grid.make_move(x, y, player.symbol)
         end
 
         puts
-        grid.print
+        print grid
         puts
 
         turn_count += 1
