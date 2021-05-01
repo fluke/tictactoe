@@ -1,3 +1,10 @@
+# The grid follows the usual X and Y axis grid. Like follows:
+# 2  * * *
+# 1  * * *
+# 0  * * *
+# Y
+#  X 0 1 2
+
 module TicTacToe
   class CreateGridStateString
     def initialize(state)
