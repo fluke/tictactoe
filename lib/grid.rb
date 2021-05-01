@@ -1,6 +1,6 @@
 module TicTacToe
   class Grid
-    EMPTY = '_'.freeze
+    EMPTY = '*'.freeze
     CROSS = 'X'.freeze
     NOUGHT = 'O'.freeze
 
