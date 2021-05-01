@@ -11,7 +11,7 @@ module TicTacToe
 
     def call
       if !(0..2).include?(@x) || !(0..2).include?(@y)
-        puts "Invalid move: Coordinates are invalid"
+        puts "Invalid move: Coordinates are invalid. X and Y should be either 0, 1, or 2"
         raise InvalidMoveError
       end
 
