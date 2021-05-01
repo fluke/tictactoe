@@ -21,6 +21,7 @@ module TicTacToe
     end
 
     def make_move(x, y, symbol)
+      CheckMoveValid.new(@state, x, y, symbol).call
       @state[x][y] = symbol
     end
   end

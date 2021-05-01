@@ -19,13 +19,20 @@ module TicTacToe
       while !CheckVictory.new(grid.state).call
         player = turn_count % 2 == 1 ? player1 : player2
 
-        puts "\n#{player.name}'s turn"
-        puts "X Coordinate"
-        x = gets.chomp.to_i
-        puts "Y Coordinate"
-        y = gets.chomp.to_i
+        while true
+          begin
+            puts "\n#{player.name}'s turn"
+            puts "X Coordinate"
+            x = gets.chomp.to_i
+            puts "Y Coordinate"
+            y = gets.chomp.to_i
 
-        grid.make_move(x, y, player.symbol)
+            grid.make_move(x, y, player.symbol)
+            break
+          rescue InvalidMoveError
+          end
+        end
+
         puts
         grid.print
         puts
