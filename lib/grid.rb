@@ -15,5 +15,13 @@ module TicTacToe
     def initialize(state = DEFAULT)
       @state = state
     end
+
+    def print
+      PrintGridState.new(@state).call
+    end
+
+    def make_move(x, y, symbol)
+      @state[x][y] = symbol
+    end
   end
 end

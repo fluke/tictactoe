@@ -6,13 +6,32 @@ module TicTacToe
     def self.start
       # Create new grid
       grid = Grid.new
-      PrintGridState.new(grid.state).call
+      grid.print
 
-      puts "Name for Player 1"
-      player1 = Player.new(name: gets.chomp, symbol: Grid::CROSS)
+      puts "\nName for Player 1"
+      player1 = Player.new(gets.chomp, Grid::CROSS)
 
-      puts "Name for Player 2"
-      player2 = Player.new(name: gets.chomp, symbol: Grid::CROSS)
+      puts "\nName for Player 2"
+      player2 = Player.new(gets.chomp, Grid::NOUGHT)
+
+      turn_count = 1
+
+      while !CheckVictory.new(grid.state).call
+        player = turn_count % 2 == 1 ? player1 : player2
+
+        puts "\n#{player.name}'s turn"
+        puts "X Coordinate"
+        x = gets.chomp.to_i
+        puts "Y Coordinate"
+        y = gets.chomp.to_i
+
+        grid.make_move(x, y, player.symbol)
+        puts
+        grid.print
+        puts
+
+        turn_count += 1
+      end
     end
   end
 end
