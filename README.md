@@ -4,11 +4,13 @@
 
 To run the game, run the command `ruby tictactoe.rb`. The grid follows the usual X and Y axis grid. Like follows:
 
+```
 2  * * *
 1  * * *
 0  * * *
 Y
  X 0 1 2
+```
 
 Steps:
 - The game will ask if you want to play against the computer and if you want to play against a hard or easy computer.
