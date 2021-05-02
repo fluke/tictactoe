@@ -11,14 +11,19 @@ module TicTacToe
       puts "\nPlay against computer? Y/N"
       computer_opponent = gets.chomp == 'Y' ? true : false
 
+      if computer_opponent
+        puts "\nPlay against hard computer? Y/N"
+        computer_difficulty = gets.chomp == 'Y' ? :hard : :easy
+      end
+
       puts "\nName for Player 1"
       player1 = Player.new(name: gets.chomp, symbol: Grid::CROSS, computer: false)
 
       if computer_opponent
-        player2 = Player.new(name: "Computer", symbol: Grid::NOUGHT, computer: computer_opponent)
+        player2 = Player.new(name: "Computer", symbol: Grid::NOUGHT, computer: computer_difficulty)
       else
         puts "\nName for Player 2"
-        player2 = Player.new(name: gets.chomp, symbol: Grid::NOUGHT, computer: computer_opponent)
+        player2 = Player.new(name: gets.chomp, symbol: Grid::NOUGHT, computer: false)
       end
 
       turn_count = 1
@@ -54,7 +59,10 @@ module TicTacToe
     def self.player_turn(grid, player)
       if player.computer
         puts "\n#{player.name}'s turn"
-        move = MakeRandomMove.new(grid.state).call
+        move = player.computer == :hard ?
+          MakeOptimalMove.new(grid.state).call :
+          MakeRandomMove.new(grid.state).call
+
         grid.make_move(move[0], move[1], player.symbol)
       else
         while true
