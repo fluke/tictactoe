@@ -6,13 +6,14 @@ module TicTacToe
 
     attr_accessor :state
 
-    def initialize(state = nil)
-      @state = state ||
-        [
-          [EMPTY, EMPTY, EMPTY],
-          [EMPTY, EMPTY, EMPTY],
-          [EMPTY, EMPTY, EMPTY]
-        ]
+    def initialize(
+      state = [
+        [EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY],
+        [EMPTY, EMPTY, EMPTY]
+      ]
+    )
+      @state = state
     end
 
     def to_s
