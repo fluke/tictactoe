@@ -29,12 +29,12 @@ module TicTacToe
       turn_count = 1
 
       while true
-        check_result = CheckResult.new(grid.state)
+        check_result = CheckResult.new(grid.state).call
 
-        if check_result.call
+        if check_result.status == :complete
           puts "\nGAME OVER: "
           case check_result.winning_symbol
-          when Grid::EMPTY
+          when nil
             print "DRAW"
           when Grid::CROSS
             print "PLAYER 1 WINS"

@@ -16,12 +16,31 @@ module TicTacToe
     end
 
     def call
-      winning_move || best_move
+      winning_move || blocking_move || best_move
     end
 
     private
 
     def winning_move
+      # Assumption here is that computer is always player 2
+      partial_win_move(Grid::NOUGHT)
+    end
+
+    def blocking_move
+      # Assumption here is that computer is always player 2
+      partial_win_move(Grid::CROSS)
+    end
+
+    def partial_win_move(symbol)
+      partial_win = result.partial_wins.find do |partial_win|
+        partial_win[0] == symbol
+      end
+
+      partial_win && partial_win[1]
+    end
+
+    def result
+      @_result ||= CheckResult.new(@state).call
     end
 
     def best_move

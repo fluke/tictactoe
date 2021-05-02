@@ -3,6 +3,32 @@ Dir[File.expand_path('../../../lib/*.rb', __FILE__)].each { |file| require file 
 Dir[File.expand_path('../../../services/*.rb', __FILE__)].each { |file| require file }
 
 class MakeOptimalMoveTest < Minitest::Test
+  def test_returns_the_winning_move_if_exists
+    grid = ::TicTacToe::Grid.new(
+      [
+        [::TicTacToe::Grid::CROSS, ::TicTacToe::Grid::NOUGHT, ::TicTacToe::Grid::EMPTY],
+        [::TicTacToe::Grid::EMPTY, ::TicTacToe::Grid::NOUGHT, ::TicTacToe::Grid::CROSS],
+        [::TicTacToe::Grid::CROSS, ::TicTacToe::Grid::EMPTY, ::TicTacToe::Grid::EMPTY]
+      ]
+    )
+
+    move = ::TicTacToe::MakeOptimalMove.new(grid.state).call
+    assert_equal [2, 1], move
+  end
+
+  def test_returns_the_move_that_blocks_the_opponent_from_winning_if_exists
+    grid = ::TicTacToe::Grid.new(
+      [
+        [::TicTacToe::Grid::CROSS, ::TicTacToe::Grid::NOUGHT, ::TicTacToe::Grid::NOUGHT],
+        [::TicTacToe::Grid::EMPTY, ::TicTacToe::Grid::CROSS, ::TicTacToe::Grid::EMPTY],
+        [::TicTacToe::Grid::EMPTY, ::TicTacToe::Grid::CROSS, ::TicTacToe::Grid::EMPTY]
+      ]
+    )
+
+    move = ::TicTacToe::MakeOptimalMove.new(grid.state).call
+    assert_equal [2, 2], move
+  end
+
   def test_returns_a_center_move_if_empty_if_no_winning_move
     grid = ::TicTacToe::Grid.new(
       [

@@ -11,6 +11,9 @@ module TicTacToe
     end
 
     def call
+      # Making the assumption that turns for X and O will be made alternately
+      # So we're not checking if X or O are playing multiple turns in a row
+
       if !(0..2).include?(@x) || !(0..2).include?(@y)
         @error_message = "Invalid move: Coordinates are invalid. X and Y should be either 0, 1, or 2"
         return false

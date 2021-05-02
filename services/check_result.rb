@@ -1,47 +1,77 @@
 module TicTacToe
   class CheckResult
-    attr_reader :winning_symbol
+    attr_reader :status, :winning_symbol, :partial_wins
 
     def initialize(state)
       @state = state
-      @winning_symbol = Grid::EMPTY
+      @status = :in_progress
+      @winning_symbol = nil
+      @partial_wins = []
     end
 
     def call
-      vertical_victory? || horizontal_victory? || diagonal_victory? || draw?
+      check_vertical
+      check_horizontal
+      check_diagonal
+      check_draw
+
+      self
     end
 
     private
 
-    def draw?
-      !@state.flatten.any? { |x| x == Grid::EMPTY }
-    end
-
-    def vertical_victory?
-      (0..2).any? do |x|
-        equal_and_non_empty?(@state[x][0], @state[x][1], @state[x][2])
+    def check_draw
+      if !@state.flatten.any? { |x| x == Grid::EMPTY }
+        @status = :complete
       end
     end
 
-    def horizontal_victory?
-      (0..2).any? do |y|
-        equal_and_non_empty?(@state[0][y], @state[1][y], @state[2][y])
+    def check_vertical
+      (0..2).each do |x|
+        check_triplet([ [x, 0], [x, 1], [x, 2] ])
       end
     end
 
-    def diagonal_victory?
-      equal_and_non_empty?(@state[0][0], @state[1][1], @state[2][2]) ||
-      equal_and_non_empty?(@state[0][2], @state[1][1], @state[2][0])
+    def check_horizontal
+      (0..2).each do |y|
+        check_triplet([ [0, y], [1, y], [2, y] ])
+      end
     end
 
-    def equal_and_non_empty?(*values)
-      values = values.uniq
-      if values.count == 1 && values.first != Grid::EMPTY
-        @winning_symbol = values.first
-        true
-      else
-        false
+    def check_diagonal
+      check_triplet([ [0, 0], [1, 1], [2, 2] ])
+      check_triplet([ [0, 2], [1, 1], [2, 0] ])
+    end
+
+    def check_triplet(spots)
+      if symbol = victory?(spots)
+        @status = :complete
+        @winning_symbol = symbol
+      elsif partial = partial_victory?(spots)
+        @status = :partial unless @status == :complete
+        @partial_wins << partial
       end
+    end
+
+    def victory?(spots)
+      values = spots.map { |s| get_value(s) }.uniq
+      (values.count == 1 && values.first != Grid::EMPTY) ? values.first : nil
+    end
+
+    def partial_victory?(spots)
+      values = spots.map { |s| get_value(s) }
+      if values.count(Grid::EMPTY) == 1
+        empty_spot = spots[values.index(Grid::EMPTY)]
+        if values.count(Grid::CROSS) == 2
+          [Grid::CROSS, empty_spot]
+        elsif values.count(Grid::NOUGHT) == 2
+          [Grid::NOUGHT, empty_spot]
+        end
+      end
+    end
+
+    def get_value(spot)
+      @state[spot[0]][spot[1]]
     end
   end
 end
