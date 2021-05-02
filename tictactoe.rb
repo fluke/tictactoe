@@ -8,6 +8,7 @@ module TicTacToe
       grid = Grid.new
       print grid
 
+      # Get players
       puts "\nPlay against computer? Y/N"
       computer_opponent = gets.chomp == 'Y' ? true : false
 
@@ -26,34 +27,39 @@ module TicTacToe
         player2 = Player.new(name: gets.chomp, symbol: Grid::NOUGHT, computer: false)
       end
 
+      # Take turns
       turn_count = 1
 
       while true
-        check_result = CheckResult.new(grid.state).call
+        break if check_result(grid)
 
-        if check_result.status == :complete
-          puts "\nGAME OVER: "
-          case check_result.winning_symbol
-          when nil
-            print "DRAW"
-          when Grid::CROSS
-            print "PLAYER 1 WINS"
-          when Grid::NOUGHT
-            print "PLAYER 2 WINS"
-          end
-
-          break
-        end
-
-        player = turn_count % 2 == 1 ? player1 : player2
+        player = (turn_count % 2 == 1) ? player1 : player2
         player_turn(grid, player)
 
-        puts
-        print grid
-        puts
+        puts "\n#{grid}\n"
 
         turn_count += 1
       end
+    end
+
+    def self.check_result(grid)
+      check_result = CheckResult.new(grid.state).call
+
+      if check_result.status == :complete
+        puts "\nGAME OVER: "
+        case check_result.winning_symbol
+        when nil
+          print "DRAW"
+        when Grid::CROSS
+          print "PLAYER 1 WINS"
+        when Grid::NOUGHT
+          print "PLAYER 2 WINS"
+        end
+
+        return true
+      end
+
+      false
     end
 
     def self.player_turn(grid, player)

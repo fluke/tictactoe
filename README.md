@@ -10,6 +10,12 @@ To run the game, run the command `ruby tictactoe.rb`. The grid follows the usual
 Y
  X 0 1 2
 
+Steps:
+- The game will ask if you want to play against the computer and if you want to play against a hard or easy computer.
+- Depending on the previous answer, the game will ask for one or two player names.
+- Players take turns. You have to input the coordinates based on the X and Y axis grid above.
+- When the game is over, the result will be announced.
+
 ## Project Structure
 
 The project is structured as following:
