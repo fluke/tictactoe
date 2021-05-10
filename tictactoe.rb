@@ -1,11 +1,44 @@
+require 'secure_random'
+
 Dir[File.dirname(__FILE__) + '/lib/*.rb'].each { |file| require file }
 Dir[File.dirname(__FILE__) + '/services/*.rb'].each { |file| require file }
 
 module TicTacToe
   class Game
-    def self.start
+    def initialize(game_id = SecureRandom.uuid)
+      @game_id = game_id
+    end
+
+    def orchestrate
+      player1 = Player.new(name: "Swanand", symbol: Grid::CROSS, computer: false)
+      player2 = Player.new(name: "Kartik", symbol: Grid::NOUGHT, computer: false)
+
+      grid = Grid.new(player1, player2)
+
+      loop do
+        input = get_input(grid.current_player)
+        parse_input(input)
+      end
+    end
+
+    private
+
+    def parse_input(input)
+      input.split.map(&:to_i)
+    end
+
+    def get_input(player)
+      filename = filename(player.symbol)
+      File.readlines(filename)[-1]
+    end
+
+    def filename(symbol)
+      "game#{@game_id}_#{symbol}"
+    end
+
+    def start
       # Create new grid
-      grid = Grid.new
+
       print grid
 
       # Get players
@@ -42,7 +75,7 @@ module TicTacToe
       end
     end
 
-    def self.check_result(grid)
+    def check_result(grid)
       check_result = CheckResult.new(grid.state).call
 
       if check_result.status == :complete
@@ -62,7 +95,7 @@ module TicTacToe
       false
     end
 
-    def self.player_turn(grid, player)
+    def player_turn(grid, player)
       if player.computer
         puts "\n#{player.name}'s turn"
         move = player.computer == :hard ?
@@ -85,4 +118,4 @@ module TicTacToe
   end
 end
 
-TicTacToe::Game.start
+TicTacToe::Game.new(1).orchestrate

@@ -11,8 +11,19 @@ module TicTacToe
     end
 
     def call
-      # Making the assumption that turns for X and O will be made alternately
-      # So we're not checking if X or O are playing multiple turns in a row
+      flattened_state = @state.flatten
+      num_crosses = flattened_state.count(Grid::CROSS)
+      num_noughts = flattened_state.count(Grid::NOUGHT)
+
+      if !(symbol == Grid::CROSS && num_crosses == num_noughts)
+        @error_message = "Invalid move: playing symbol out of order"
+        return false
+      end
+
+      if !(symbol == Grid::NOUGHT && (num_crosses == num_noughts + 1))
+        @error_message = "Invalid move: playing symbol out of order"
+        return false
+      end
 
       if !(0..2).include?(@x) || !(0..2).include?(@y)
         @error_message = "Invalid move: Coordinates are invalid. X and Y should be either 0, 1, or 2"
